@@ -24,6 +24,9 @@ if response != '':
     clean_response = response.text[1:-1]
     meldingen_lijst.append([clean_response])
 
+
+print(response.status_code)
+
 response = meldingen_lijst
 resultaat_clean = []
 for n in response:
