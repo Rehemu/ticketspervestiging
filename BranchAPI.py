@@ -21,7 +21,6 @@ if response.status_code == 200 or response.status_code == 206:
     df = pd.DataFrame(data)
     df.to_excel('branches.xlsx', index=False)
     # Print the DataFrame
-    print(df)
 
 else:
     # Print an error message if the request was unsuccessful
@@ -37,8 +36,8 @@ geolocator = Nominatim(user_agent="geoapiExercises")
 geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
 
 # Apply the geocoder with the rate limiter
-df['name'] = df['name'].str.split(',', expand=True)[0]
-df['location'] = df['name'].apply(geocode)
+df['geoname'] = df['name'].str.split('-|/|\\\\', expand=True)[0]
+df['location'] = df['geoname'].apply(geocode)
 
 # Get latitude and longitude
 df['latitude'] = df['location'].apply(lambda loc: loc.latitude if loc else None)
