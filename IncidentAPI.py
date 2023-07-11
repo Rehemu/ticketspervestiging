@@ -3,7 +3,7 @@ import pandas as pd
 from tabulate import tabulate
 
 behandelaar = "Werkplekbeheer"
-status = ('Gereed', 'Afgesloten')
+status = ('Gereed', 'Afgesloten','Automatisch afgemeld')
 last_date = '2022-10-07T08:20:25Z'
 
 page_size = 5000
@@ -18,10 +18,9 @@ if response.status_code == 200 or response.status_code == 206:
     print(response.status_code)
     if data:
         df = pd.DataFrame(data)
-        print(tabulate(df, headers='keys', tablefmt='psql'))
     else:
         print("No data received")
 else:
     print(f"Request failed with status code {response.status_code}")
 
-df.to_excel('Incidents.xlsx',index=False)
+df.to_excel('Incidents.xlsx', index=False)

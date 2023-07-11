@@ -1,16 +1,19 @@
-import collections.abc
+import pandas as pd
+import ast
 
 
-def flatten_dict(d, parent_key='', sep='_'):
-    items = []
-    for k, v in d.items():
-        new_key = f"{parent_key}{sep}{k}" if parent_key else k
-        if isinstance(v, collections.abc.MutableMapping):
-            items.extend(flatten_dict(v, new_key, sep=sep).items())
-        else:
-            items.append((new_key, v))
-    return dict(items)
+def cleaning_incidents(filename):
+    df = pd.read_excel(filename)
+
+    # Convert stringified objects to actual dictionaries
+    df["results"] = df["results"].apply(ast.literal_eval)
+
+    # Create new columns for the keys of interest
+    df["branch_name"] = df.apply(lambda row: row["requester"]["branch"]["name"])
+
+    # Save file back with recognizable name without overwrite
+    df.to_excel(filename.split(".")[0] + "_cleaned.xlsx")
 
 
-# Apply function to each cell in the series
-df_flat = df['results'].apply(flatten_dict).apply(pd.Series)
+# Call the function
+cleaning_incidents("changes.xlsx")
